@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useState, createContext, useMemo } from 'react';
+import useEscape from '../../hooks/use-escape';
 
 export const ToastContext = createContext();
 
@@ -25,15 +26,9 @@ function ToastProvider({ children }) {
             ...notifications.slice(itemToDelete + 1)]);
     }, [notifications]);
 
-    useEffect(() => {
-        function clearNotifications(event) {
-            if (event.key === 'Escape')
-                setNotifications([]);
-        }
-        window.addEventListener("keydown", clearNotifications);
+    const clearNotifications = useCallback(() => setNotifications([]), []);
 
-        return () => window.removeEventListener("keydown", clearNotifications);
-    }, []);
+    useEscape(clearNotifications);
 
     const value = useMemo(() => ({
         notifications,
