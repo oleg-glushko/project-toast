@@ -77,3 +77,49 @@ If you get stuck, you may wish to review the following lessons from the course:
 - The toast can be hidden by clicking the “×” button within the toast.
 
 ---
+
+## Exercise 3: Toast shelf
+
+One of the core defining characteristics of toast notifications is that they stack!
+
+![Several toasts popping up, one after another](./docs/poppin-toasts.gif)
+
+Your mission in this exercise is to restructure things so that our `ToastPlayground` allows us to create _multiple_ toasts.
+
+To help in your quest, you'll find a `ToastShelf` component in this project. It will automatically apply the styles and animations.
+
+You'll need to replace the `Toast` live demo with this new `ToastShelf` component, inside `ToastPlayground`:
+
+```diff
+<header>
+  <img alt="Cute toast mascot" src="/toast.png" />
+  <h1>Toast Playground</h1>
+</header>
+
+- <Toast />
++ <ToastShelf />
+
+<div className={styles.controlsWrapper}>
+  <div className={styles.row}>
+```
+
+By the end of this exercise, it should look like this:
+
+![Screen recording showing toast messages popping up when “Pop Toast!” is clicked](./docs/toast-exercise-3-demo.gif)
+
+**This is a very tricky exercise.** If you're not sure where to start / how to make this work, I share some [hints on the course platform](https://courses.joshwcomeau.com/joy-of-react/project-toast/03-hints).
+
+Some lessons that might help, from the course:
+
+- [The onClick Parable](https://courses.joshwcomeau.com/joy-of-react/02-state/04.02-on-click-parable)
+- [Dynamic key generation](https://courses.joshwcomeau.com/joy-of-react/02-state/07-key-generation)
+
+**Acceptance Criteria:**
+
+- Instead of live-editing a single Toast instance, the playground should be used to push new toast messages onto a stack, rendered inside `ToastShelf` and shown in the corner of the page.
+- When “Pop Toast!” is clicked, the message/variant form controls should be reset to their default state (`message` should be an empty string, `variant` should be "notice").
+- Clicking the “×” button inside the toast should remove that specific toast (but leave the rest untouched).
+- A proper `<form>` tag should be used in the `ToastPlayground`. The toast should be created when submitting the form.
+- **There should be no key warnings in the console!** Keys should be unique, and you should not use the index.
+
+---

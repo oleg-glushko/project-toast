@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../Button';
-import Toast from "../Toast";
+import ToastShelf from "../ToastShelf";
 
 import styles from './ToastPlayground.module.css';
 
@@ -9,11 +9,28 @@ const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 function ToastPlayground() {
     const [message, setMessage] = useState("");
     const [variant, setVariant] = useState("notice");
-    const [isVisible, setVisible] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
     function handleSubmit(event) {
         event.preventDefault();
-        setVisible(true);
+        const newNotification = {
+            id: crypto.randomUUID(),
+            message,
+            variant,
+        }
+        setNotifications([...notifications, newNotification]);
+        setMessage("");
+        setVariant("notice");
+    }
+
+    function handleDismiss(id) {
+        const itemToDelete = notifications.findIndex(item => item.id == id);
+        if (itemToDelete === -1)
+            return;
+
+        setNotifications([
+            ...notifications.slice(0, itemToDelete),
+            ...notifications.slice(itemToDelete + 1)]);
     }
 
     return (
@@ -23,10 +40,9 @@ function ToastPlayground() {
                 <h1>Toast Playground</h1>
             </header>
 
-            {isVisible && <Toast message={message} type={variant}
-                handleDismiss={() => setVisible(false)} />}
+            {<ToastShelf notifications={notifications} handleDismiss={handleDismiss} />}
 
-            <div className={styles.controlsWrapper}>
+            <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
                 <div className={styles.row}>
                     <label
                         htmlFor="message"
@@ -37,7 +53,8 @@ function ToastPlayground() {
                     </label>
                     <div className={styles.inputWrapper}>
                         <textarea id="message" className={styles.messageInput}
-                            value={message} onChange={(event) => setMessage(event.target.value)} />
+                            value={message} required={true}
+                            onChange={(event) => setMessage(event.target.value)} />
                     </div>
                 </div>
 
@@ -68,10 +85,10 @@ function ToastPlayground() {
                     <div
                         className={`${styles.inputWrapper} ${styles.radioWrapper}`}
                     >
-                        <Button onClick={handleSubmit}>Pop Toast!</Button>
+                        <Button>Pop Toast!</Button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

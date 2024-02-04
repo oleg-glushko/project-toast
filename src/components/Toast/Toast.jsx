@@ -17,19 +17,19 @@ const ICONS_BY_VARIANT = {
     error: AlertOctagon,
 };
 
-function Toast({ handleDismiss, message, type = "notice" }) {
-    const Icon = ICONS_BY_VARIANT[type];
+function Toast({ handleDismiss, id, children, variant = "notice" }) {
+    const Icon = ICONS_BY_VARIANT[variant];
     if (Icon == null)
-        throw new Error(`Unknown type ${type}, expected ${ICONS_BY_VARIANT}`);
+        throw new Error(`Unknown variant ${variant}, expected ${ICONS_BY_VARIANT}`);
 
     return (
-        <div className={`${styles.toast} ${styles[type]}`}>
+        <div className={`${styles.toast} ${styles[variant]}`}>
             <div className={styles.iconContainer}>
                 <Icon size={24} />
             </div>
-            <p className={styles.content}>{message}</p>
+            <p className={styles.content}>{children}</p>
             <button className={styles.closeButton}
-                onClick={handleDismiss}
+                onClick={() => handleDismiss(id)}
             >
                 <X size={24} />
                 <VisuallyHidden>Dismiss message</VisuallyHidden>
