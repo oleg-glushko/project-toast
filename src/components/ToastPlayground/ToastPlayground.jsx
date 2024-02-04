@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
@@ -5,6 +6,9 @@ import styles from './ToastPlayground.module.css';
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
+    const [message, setMessage] = useState("");
+    const [variant, setVariant] = useState("notice");
+
     return (
         <div className={styles.wrapper}>
             <header>
@@ -22,27 +26,31 @@ function ToastPlayground() {
                         Message
                     </label>
                     <div className={styles.inputWrapper}>
-                        <textarea id="message" className={styles.messageInput} />
+                        <textarea id="message" className={styles.messageInput}
+                            value={message} onChange={(event) => setMessage(event.target.value)} />
                     </div>
                 </div>
 
                 <div className={styles.row}>
                     <div className={styles.label}>Variant</div>
-                    <div
-                        className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-                    >
-                        <label htmlFor="variant-notice">
-                            <input
-                                id="variant-notice"
-                                type="radio"
-                                name="variant"
-                                value="notice"
-                            />
-                            notice
-                        </label>
+                    {VARIANT_OPTIONS.map((option, index) => (
+                        <div key={index}
+                            className={`${styles.inputWrapper} ${styles.radioWrapper}`}
+                        >
+                            <label htmlFor={`variant-${option}`}>
+                                <input
+                                    id={`variant-${option}`}
+                                    type="radio"
+                                    name="variant"
+                                    value={option}
+                                    checked={variant === option}
+                                    onChange={() => setVariant(option)}
+                                />
+                                {option}
+                            </label>
+                        </div>
+                    ))}
 
-                        {/* TODO Other Variant radio buttons here */}
-                    </div>
                 </div>
 
                 <div className={styles.row}>
