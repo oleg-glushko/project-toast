@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useState, createContext, useMemo } from 'react';
 
 export const ToastContext = createContext();
@@ -24,6 +24,16 @@ function ToastProvider({ children }) {
             ...notifications.slice(0, itemToDelete),
             ...notifications.slice(itemToDelete + 1)]);
     }, [notifications]);
+
+    useEffect(() => {
+        function clearNotifications(event) {
+            if (event.key === 'Escape')
+                setNotifications([]);
+        }
+        window.addEventListener("keydown", clearNotifications);
+
+        return () => window.removeEventListener("keydown", clearNotifications);
+    }, []);
 
     const value = useMemo(() => ({
         notifications,
